@@ -7,14 +7,8 @@ class Confluence(APIApplication):
     def __init__(self, integration: Integration = None, **kwargs) -> None:
         super().__init__(name='confluence', integration=integration, **kwargs)
         self.base_url: str | None = None 
+        self.accessible_resources() # Fetch and set base_url immediately
 
-    def _ensure_base_url_set(self):
-        """Ensures the base_url is set by calling accessible_resources if needed."""
-        if self.base_url is None:
-            self.accessible_resources()
-            if self.base_url is None: 
-                 raise RuntimeError("Failed to set the base_url after calling accessible_resources.")
-   
     def accessible_resources(self) -> list[dict[str, Any]]:
         """Fetches accessible resources and sets the base_url for the first resource found."""
         url = "https://api.atlassian.com/oauth/token/accessible-resources"
@@ -56,7 +50,6 @@ class Confluence(APIApplication):
         Tags:
             Attachment
         """
-        self._ensure_base_url_set() # Ensure base_url is set
         url = f"{self.base_url}/attachments"
         query_params = {k: v for k, v in [('sort', sort), ('cursor', cursor), ('status', status), ('mediaType', mediaType), ('filename', filename), ('limit', limit)] if v is not None}
         response = self._get(url, params=query_params) 
