@@ -6,11 +6,13 @@ from universal_mcp.integrations import Integration
 class Confluence(APIApplication):
     def __init__(self, integration: Integration = None, **kwargs) -> None:
         super().__init__(name='confluence', integration=integration, **kwargs)
-        self.base_url: str | None = None 
-        self.accessible_resources() # Fetch and set base_url immediately
+        self._base_url: str | None = None 
 
-    def accessible_resources(self) -> list[dict[str, Any]]:
+    @property
+    def base_url(self):
         """Fetches accessible resources and sets the base_url for the first resource found."""
+        if self._base_url:
+            return self._base_url
         url = "https://api.atlassian.com/oauth/token/accessible-resources"
         response = self._get(url) 
         response.raise_for_status() 
@@ -26,9 +28,9 @@ class Confluence(APIApplication):
         if not resource_id:
             raise ValueError("Could not determine the resource ID from the first accessible resource.")
 
-        self.base_url = f"https://api.atlassian.com/ex/confluence/{resource_id}/api/v2"
+        self._base_url = f"https://api.atlassian.com/ex/confluence/{resource_id}/api/v2"
 
-        return resources 
+        return self._base_url 
 
 
 
