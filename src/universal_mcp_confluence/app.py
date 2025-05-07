@@ -3,7 +3,7 @@ from universal_mcp.applications import APIApplication
 from universal_mcp.integrations import Integration
 
 
-class Confluence(APIApplication):
+class ConfluenceApp(APIApplication):
     def __init__(self, integration: Integration = None, **kwargs) -> None:
         super().__init__(name='confluence', integration=integration, **kwargs)
         self._base_url: str | None = None 
