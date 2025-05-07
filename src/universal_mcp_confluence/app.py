@@ -32,7 +32,14 @@ class ConfluenceApp(APIApplication):
 
         return self._base_url 
 
-
+    @base_url.setter
+    def base_url(self, value: str) -> None:
+        """Sets the base URL for the Confluence API.
+        
+        Args:
+            value (str): The base URL to set.
+        """
+        self._base_url = value
 
     def get_attachments(self, sort=None, cursor=None, status=None, mediaType=None, filename=None, limit=None) -> dict[str, Any]:
         """
