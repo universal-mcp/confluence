@@ -1,23 +1,23 @@
 from typing import Any
 from universal_mcp.applications import APIApplication
 from universal_mcp.integrations import Integration
+import httpx
 
 
 class ConfluenceApp(APIApplication):
     def __init__(self, integration: Integration = None, **kwargs) -> None:
         super().__init__(name='confluence', integration=integration, **kwargs)
         self._base_url: str | None = None 
+    
+    def get_base_url(self):
 
-    @property
-    def base_url(self):
-        """Fetches accessible resources and sets the base_url for the first resource found."""
-        if self._base_url:
-            return self._base_url
+        headers = self._get_headers()
         url = "https://api.atlassian.com/oauth/token/accessible-resources"
-        response = self._get(url) 
-        response.raise_for_status() 
-        
-        resources = response.json() 
+
+
+        response = httpx.get(url, headers=headers)
+        response.raise_for_status()
+        resources=  response.json()
 
         if not resources:
             raise ValueError("No accessible Confluence resources found for the provided credentials.")
@@ -28,8 +28,14 @@ class ConfluenceApp(APIApplication):
         if not resource_id:
             raise ValueError("Could not determine the resource ID from the first accessible resource.")
 
-        self._base_url = f"https://api.atlassian.com/ex/confluence/{resource_id}/api/v2"
+        return f"https://api.atlassian.com/ex/confluence/{resource_id}/api/v2"        
 
+    @property
+    def base_url(self):
+        """Fetches accessible resources and sets the base_url for the first resource found."""
+        if self._base_url:
+            return self._base_url
+        self._base_url = self.get_base_url()
         return self._base_url 
 
     @base_url.setter
