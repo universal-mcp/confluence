@@ -1,10 +1,10 @@
-# Confluence MCP Server
+# ConfluenceApp MCP Server
 
-An MCP Server for the Confluence API.
+An MCP Server for the ConfluenceApp API.
 
 ## 🛠️ Tool List
 
-This is automatically generated from OpenAPI schema for the Confluence API.
+This is automatically generated from OpenAPI schema for the ConfluenceApp API.
 
 
 | Tool | Description |
