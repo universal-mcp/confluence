@@ -63,7 +63,7 @@ class ConfluenceApp(APIApplication):
             dict[str, Any]: Returned if the requested attachments are returned.
 
         Tags:
-            Attachment
+            Attachment, important
         """
         url = f"{self.base_url}/attachments"
         query_params = {k: v for k, v in [('sort', sort), ('cursor', cursor), ('status', status), ('mediaType', mediaType), ('filename', filename), ('limit', limit)] if v is not None}
@@ -116,7 +116,7 @@ class ConfluenceApp(APIApplication):
             Any: Returned if the attachment was successfully deleted.
 
         Tags:
-            Attachment
+            Attachment, important
         """
         if id is None:
             raise ValueError("Missing required parameter 'id'")
@@ -162,7 +162,7 @@ class ConfluenceApp(APIApplication):
             dict[str, Any]: Returned if the requested operations are returned.
 
         Tags:
-            Operation
+            Operation, important
         """
         if id is None:
             raise ValueError("Missing required parameter 'id'")
@@ -187,7 +187,7 @@ class ConfluenceApp(APIApplication):
             dict[str, Any]: Returned if the requested content properties are successfully retrieved.
 
         Tags:
-            Content Properties
+            Content Properties, important
         """
         if attachment_id is None:
             raise ValueError("Missing required parameter 'attachment-id'")
